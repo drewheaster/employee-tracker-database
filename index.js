@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const { Pool } = require('pg');
 
+// Creates server connection to PSQL database
 const pool = new Pool(
   {
     // Enter PostgreSQL username
@@ -11,21 +12,14 @@ const pool = new Pool(
     database: 'company_db'
 },
 console.log('Connected to the company_db database!')
-)
+);
 
 pool.connect();
-
-// view all departments, 
-// view all roles, 
-// view all employees, 
-// add a department, 
-// add a role, 
-// add an employee,
-// update an employee role
 
 const CompanyCMSPrompt = () => {
     inquirer
         .prompt([
+            // Initial prompting
             {
                 type: 'list',
                 message: 'What would you like to do?',
@@ -45,12 +39,14 @@ const CompanyCMSPrompt = () => {
             const choice = answers.initialSelection;
 
             switch (choice) {
+                // Case to view each department
                 case 'View all departments':
                     pool.query('SELECT * FROM department;', (err, data) => {
                                 console.table(data.rows);
                                 CompanyCMSPrompt();
                     });
                 break;
+                // case to view all roles
                 case 'View all roles':
                     // JOIN department ON role.department_id = department.id
                     pool.query('SELECT role.id, role.title, role.salary, department.name AS department FROM role JOIN department ON role.department_id = department.id;', (err, data) => {
@@ -58,6 +54,7 @@ const CompanyCMSPrompt = () => {
                         CompanyCMSPrompt();
                     });
                 break;
+                // Case to view all employees
                 case 'View all employees':
                     pool.query('SELECT employee.id, employee.first_name, employee.last_name, role.title AS title, department.name AS department, role.salary AS salary, employee.manager_id AS manager FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id;', (err, data) => {
                         console.table(data.rows);
@@ -78,6 +75,7 @@ const CompanyCMSPrompt = () => {
                         });
                     });
                 break;
+                // Case for adding a new role
                 case 'Add a role':
                     inquirer.prompt([
                         {
@@ -101,6 +99,7 @@ const CompanyCMSPrompt = () => {
                         });
                     });
                 break;
+                // Case for adding employee
                 case 'Add an employee':
                     inquirer.prompt([
                         {
@@ -124,20 +123,6 @@ const CompanyCMSPrompt = () => {
                         });
                     });
                 break;
-                // case 'Update an employee role':
-                //     const employee = pool.query('SELECT first_name, last_name from employee;');
-                //     inquirer.prompt([
-                //         {
-                //             type: 'list',
-                //             message: 'Choose an employee:',
-                //             name: 'name'
-                //         },
-                //     ]).then((answers) => {
-                //         pool.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ('${answers.firstName}', '${answers.lastName}', ${answers.roleId})`, () => {
-                //             CompanyCMSPrompt();
-                //         });
-                //     });
-                // break;
                 default: 
                     process.exit();
             };
