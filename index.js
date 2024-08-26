@@ -46,19 +46,20 @@ const CompanyCMSPrompt = () => {
 
             switch (choice) {
                 case 'View all departments':
-                    pool.query('SELECT * FROM department', (err, data) => {
+                    pool.query('SELECT * FROM department;', (err, data) => {
                                 console.table(data.rows);
                                 CompanyCMSPrompt();
                     });
                 break;
                 case 'View all roles':
-                    pool.query('SELECT * FROM role', (err, data) => {
+                    // JOIN department ON role.department_id = department.id
+                    pool.query('SELECT role.id, role.title, role.salary, department.name AS department FROM role JOIN department ON role.department_id = department.id;', (err, data) => {
                         console.table(data.rows);
                         CompanyCMSPrompt();
                     });
                 break;
                 case 'View all employees':
-                    pool.query('SELECT * FROM employee', (err, data) => {
+                    pool.query('SELECT employee.id, employee.first_name, employee.last_name, role.title AS title, department.name AS department, role.salary AS salary, employee.manager_id AS manager FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id;', (err, data) => {
                         console.table(data.rows);
                         CompanyCMSPrompt();
                     });
@@ -72,7 +73,7 @@ const CompanyCMSPrompt = () => {
                         }
                     ]).then((answers) => {
                         console.log(answers.department);
-                        pool.query(`INSERT INTO department (name) VALUES ('${answers.department}')`, () => {
+                        pool.query(`INSERT INTO department (name) VALUES ('${answers.department}');`, () => {
                             CompanyCMSPrompt();
                         });
                     });
@@ -95,7 +96,7 @@ const CompanyCMSPrompt = () => {
                             name: 'dept_id'
                         }
                     ]).then((answers) => {
-                        pool.query(`INSERT INTO role (title, salary, department_id) VALUES ('${answers.title}', ${answers.salary}, ${answers.dept_id})`, () => {
+                        pool.query(`INSERT INTO role (title, salary, department_id) VALUES ('${answers.title}', ${answers.salary}, ${answers.dept_id});`, () => {
                             CompanyCMSPrompt();
                         });
                     });
@@ -123,6 +124,20 @@ const CompanyCMSPrompt = () => {
                         });
                     });
                 break;
+                // case 'Update an employee role':
+                //     const employee = pool.query('SELECT first_name, last_name from employee;');
+                //     inquirer.prompt([
+                //         {
+                //             type: 'list',
+                //             message: 'Choose an employee:',
+                //             name: 'name'
+                //         },
+                //     ]).then((answers) => {
+                //         pool.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ('${answers.firstName}', '${answers.lastName}', ${answers.roleId})`, () => {
+                //             CompanyCMSPrompt();
+                //         });
+                //     });
+                // break;
                 default: 
                     process.exit();
             };

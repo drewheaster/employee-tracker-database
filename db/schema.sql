@@ -39,18 +39,13 @@ VALUES  ('Software Developer II', 200000, 1),
         ('Design Lead', 100000, 2),
         ('Graphic Designer', 60000, 2),
         ('Photographer', 45000, 2),
-        ('Web Designer', 75000, 2),
-        ('Test Engineer II', 80000, 3),
-        ('Test Engineer I', 50000, 3),
-        ('Sales Lead', 90000, 4),
-        ('Sales Rep II', 60000, 4),
-        ('Sales Rep I', 45000, 4),
-        ('Security Guard', 35000, 5);
-
--- SET @SoftwareDevManager = (SELECT id FROM employee WHERE role_id IN (SELECT id FROM role WHERE title = 'Software Developer II'));
--- SET @DesignManager = (SELECT id FROM employee WHERE role_id IN (SELECT id FROM role WHERE title = 'Design Lead'));
--- SET @TestEngineeringManager = (SELECT id FROM employee WHERE role_id IN (SELECT id FROM role WHERE title = 'Test Engineer II'));
--- SET @SalesManager = (SELECT id FROM employee WHERE role_id IN (SELECT id FROM role WHERE title = 'Sales Lead'));
+        ('Web Designer', 75000, 3),
+        ('Test Engineer II', 80000, 4),
+        ('Test Engineer I', 50000, 4),
+        ('Sales Lead', 90000, 5),
+        ('Sales Rep II', 60000, 5),
+        ('Sales Rep I', 45000, 5),
+        ('Security Guard', 35000, 6);
 
 INSERT INTO employee (first_name, last_name, role_id)
 VALUES  ('Ava', 'Rodriguez', 1),
