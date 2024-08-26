@@ -10,7 +10,7 @@ const pool = new Pool(
     host: 'localhost',
     database: 'company_db'
 },
-console.log('Connected to the courses_db database!')
+console.log('Connected to the company_db database!')
 )
 
 pool.connect();
@@ -85,12 +85,12 @@ const CompanyCMSPrompt = () => {
                             name: 'title'
                         },
                         {
-                            type: 'input',
+                            type: 'number',
                             message: 'Enter the salary of the role:',
                             name: 'salary'
                         },
                         {
-                            type: 'input',
+                            type: 'number',
                             message: 'Enter the department id of the role:',
                             name: 'dept_id'
                         }
@@ -113,12 +113,12 @@ const CompanyCMSPrompt = () => {
                             name: 'lastName'
                         },
                         {
-                            type: 'input',
+                            type: 'number',
                             message: 'Enter the role id:',
                             name: 'roleId'
                         },
                     ]).then((answers) => {
-                        pool.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id)) VALUES ('${answers.firstName}', '${answers.lastName}', ${answers.roleId})`, () => {
+                        pool.query(`INSERT INTO employee (first_name, last_name, role_id) VALUES ('${answers.firstName}', '${answers.lastName}', ${answers.roleId})`, () => {
                             CompanyCMSPrompt();
                         });
                     });
